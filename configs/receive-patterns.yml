@@ -1,0 +1,25 @@
+# Good Go regex tester: https://regex101.com/
+# Regex syntax: https://github.com/google/re2/wiki/Syntax
+# Named regex capture groups are REQUIRED (https://www.regular-expressions.info/named.html)
+# Supported capture group names:
+#  - fromhost
+#  - fromip
+#  - byhost
+#  - byip
+#  - via
+#  - with
+#  - id
+#  - timestamp
+
+# Samples/examples, ymmv
+#Date:       '^Date: (?P<DateTime>.*)'
+#Received: '^Received:( from (?P<from>.*?))?( by (?P<by>.*?))?( via (?P<via>.*?))?( with (?P<with>.*?))?( id (?P<id>.*?))?(; (?P<timestamp>.*))'
+#Received: '^Received:( from (?P<fromhost>.*?)( (?P<fromip>\(.*?\))?)?)?( by (?P<byhost>.*?)( (?P<byip>\((.*?)\))?)?)?( via (?P<via>.*?))?( with (?P<with>.*?))?( id (?P<id>.*?))?(; (?P<timestamp>.*))'
+#Received: '^Received:( from (?P<fromhost>.*?)( \((?P<fromip>.*?)\))?)?( by (?P<byhost>.*?)( \((?P<byip>(.*?))?\))?)?( via (?P<via>.*?))?( with (?P<with>.*?))?( id (?P<id>.*?))?(; (?P<timestamp>.*))'
+#ReceivedBy: '^Received: by (?P<Hostname>[0-9:].*) with SMTP id (?P<SMTPId>.*);(?P<DateTime>.*)'
+#ReceivedFrom: '^Received: from (?P<Hostname>.*) \(.*\) by (.*) with SMTPS id (?P<SMTPId>.*) for (.*);(?P<DateTime>.*)'
+#ReceivedByEx: '^Received: from (?P<Hostname>.*)? \((?P<HostIP>.*)\)? by (.*)? with (.*)? id (?P<SMTPId>.*);(?P<DateTime>.*)'
+#XReceivedGoogle: '^X-Received: by (?P<Hostname>[0-9:].*) with SMTP id (?P<SMTPId>.*)\.(.*)\.(?P<timestamp>.*);(?P<DateTime>.*)'
+
+# Read as a go map. It's a good idea to only have one pattern to avoid duplicate captures
+Received: '^Received:( from (?P<fromhost>.*?)( \((?P<fromip>.*?)\))?)?( by (?P<byhost>.*?)( \((?P<byip>(.*?))?\))?)?( via (?P<via>.*?))?( with (?P<with>.*?))?( id (?P<id>.*?))?( for (?P<for>.*?))?(; (?P<timestamp>.*))'

@@ -1,0 +1,5 @@
+Processors:
+  - MTA:
+      Kind: "IMAP"
+    Client:
+      Kind: "MSGRAPH"
