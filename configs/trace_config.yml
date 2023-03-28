@@ -1,0 +1,31 @@
+Processors:
+  # Each test consists of a MTA/Client pair measuring send and receive response
+  # Multiple tests (MTA/Client pairs are supported as this is a YAML array of pairs
+  - MTA:
+      Kind: 'IMAP'
+      SMTPHost: ''
+      SMTPPort: ''
+      UserName: ''
+      Password: ''
+      IMAPUrl: ''
+    Client:
+      Kind: 'IMAP'
+      SMTPHost: ''
+      SMTPPort: ''
+      UserName: ''
+      Password: ''
+      IMAPUrl: ''
+  - MTA:
+      kind: 'IMAP'
+      SMTPHost: ''
+      SMTPPort: ''
+      UserName: ''
+      Password: ''
+      IMAPUrl: ''
+    Client:
+      Kind: 'IMAP'
+      SMTPHost: ''
+      SMTPPort: ''
+      UserName: ''
+      Password: ''
+      IMAPUrl: ''

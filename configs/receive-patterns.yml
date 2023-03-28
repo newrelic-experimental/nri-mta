@@ -21,5 +21,6 @@
 #ReceivedByEx: '^Received: from (?P<Hostname>.*)? \((?P<HostIP>.*)\)? by (.*)? with (.*)? id (?P<SMTPId>.*);(?P<DateTime>.*)'
 #XReceivedGoogle: '^X-Received: by (?P<Hostname>[0-9:].*) with SMTP id (?P<SMTPId>.*)\.(.*)\.(?P<timestamp>.*);(?P<DateTime>.*)'
 
-# Read as a go map. It's a good idea to only have one pattern to avoid duplicate captures
+# Read as a go map. It's a good idea to only have one pattern to avoid duplicate captures. For instance don't mix Received: and X-Received: , one or the other but not both.
+# This pattern should match any standard RFC 2821 Trace (Received:) header (https://www.rfc-editor.org/rfc/rfc2821#section-4.4)
 Received: '^Received:( from (?P<fromhost>.*?)( \((?P<fromip>.*?)\))?)?( by (?P<byhost>.*?)( \((?P<byip>(.*?))?\))?)?( via (?P<via>.*?))?( with (?P<with>.*?))?( id (?P<id>.*?))?( for (?P<for>.*?))?(; (?P<timestamp>.*))'
