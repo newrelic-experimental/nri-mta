@@ -1,0 +1,10 @@
+integrations:
+  - name: nri-mta
+    env:
+      # Avoid escape substitution by enclosing strings in SINGLE quotes
+      # Full path to the receive pattern file
+      RECEIVE_PATTERNS: ''
+      # Seconds to wait before a send or receive timesout. Default is 30 seconds
+      TIMEOUT: 30
+      # Full path to the trace config file
+      TRACE_CONFIG: ''
