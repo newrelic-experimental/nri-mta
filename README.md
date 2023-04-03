@@ -6,8 +6,6 @@
 In an environment where there are multiple mail servers serving a single email domain (MX record, load balancer, Active Directory + Exchange, ....) it is not possible to directly measure the send/receive performance of an individual 
 mail server _unless_ SMTP and IMAP servers are *directly* addressable. It is a future enhancement to infer performance based on the send/receive path as indicated by an email's `received:` headers.
 
-We can provide the header values as Metrics (and perhaps some day as Events or Spans), however the analysis/visualization is strictly a back-end function. Without significant back-end work these measurements are only moderately useful.
-
 ## Installation
 Copy the appropriate [Release](releases/) executable to
 - Linux `/var/db/newrelic-infra/custom-integrations/nri-mta`
