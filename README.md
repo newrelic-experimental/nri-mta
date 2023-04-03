@@ -18,8 +18,7 @@ Copy [`nri-mta-config.sample.yml`](nri-mta-config.sample.yml) to `nri-mta-config
 - Linux `/etc/newrelic-infra/integrations.d/`
 - Windows `\Program Files\NewRelic\newrelic-infra\inregrations.d`
 
-This is the file that lets Infrastructure know the integration is available. [Standard Infrastructure configuration settings apply.](https://docs.newrelic.
-com/docs/infrastructure/host-integrations/infrastructure-integrations-sdk/specifications/host-integrations-standard-configuration-format/)
+This is the file that lets Infrastructure know the integration is available. [Standard Infrastructure configuration settings apply.](https://docs.newrelic.com/docs/infrastructure/host-integrations/infrastructure-integrations-sdk/specifications/host-integrations-standard-configuration-format/)
 
 Additionally, these configuration settings are available under the `env` stanza in `nri-mta-config.yml`:
 - `RECEIVE_PATTERNS`: a string containing the full path to the receive pattern file.
@@ -27,8 +26,7 @@ Additionally, these configuration settings are available under the `env` stanza 
 - `TRACE_CONFIG`:  a string containing the full path to the trace config file.
 
 ### Receive pattern file
-The [regular expressions](https://github.com/google/re2/wiki/Syntax) in this file capture the header information that is used to generate Metrics. For [RFC 2821](https://www.rfc-editor.
-org/rfc/rfc2821#section-4.4) compliant MTAs the single enabled expression should be sufficient:
+The [regular expressions](https://github.com/google/re2/wiki/Syntax) in this file capture the header information that is used to generate Metrics. For [RFC 2821](https://www.rfc-editor.org/rfc/rfc2821#section-4.4) compliant MTAs the single enabled expression should be sufficient:
 ```yaml
 Received: '^Received:( from (?P<fromhost>.*?)( \((?P<fromip>.*?)\))?)?( by (?P<byhost>.*?)( \((?P<byip>(.*?))?\))?)?( via (?P<via>.*?))?( with (?P<with>.*?))?( id (?P<id>.*?))?( for (?P<for>.*?))?(; (?P<timestamp>.*))'
 ```
@@ -59,7 +57,7 @@ Currently the only `Kind` available is `IMAP`, at some future point `MSGRAPH` ( 
 
 ## Outputs
 ### Metrics
-Each `recieved:` line generates an `MTA` guage metric with these attributes:
+Each `received:` line generates an `MTA` guage metric with these attributes:
 - "direction": SEND | RECEIVE
 - "messageId": A unique identifier for the transaction.
 - "receivedAt": timestamp
