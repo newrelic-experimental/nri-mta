@@ -2,6 +2,7 @@ package processor
 
 import (
    "fmt"
+   "github.com/newrelic/infra-integrations-sdk/v4/data/event"
    "github.com/newrelic/infra-integrations-sdk/v4/data/metric"
    "github.com/newrelic/infra-integrations-sdk/v4/integration"
    "github.com/newrelic/infra-integrations-sdk/v4/log"
@@ -26,7 +27,59 @@ type timing struct {
    id       int
 }
 
-// TODO add an option for ToEvents
+func (T Timing) ToEvent(entity *integration.Entity, src string, dst string) {
+   evt, err := event.New(time.Now(), "MTA response time", "MTA")
+   if err != nil {
+      log.Error(" error creating new Event: %v", err)
+      return
+   }
+
+   evt.Attributes["direction"] = string(T.direction)
+   evt.Attributes["messageId"] = T.id
+   evt.Attributes["source"] = src
+   evt.Attributes["destination"] = dst
+   evt.Attributes["transitTime"] = T.timing()
+   entity.AddEvent(evt)
+}
+
+func (T Timing) source() (src string) {
+   if len(T.timings) < 1 {
+      log.Warn("source: no timings available")
+      return
+   }
+
+   // last from
+   idx := len(T.timings) - 1
+   src = T.timings[idx].fromHost
+   if src == "" {
+      src = T.timings[idx].fromIP
+   }
+   return
+}
+
+func (T Timing) destination() (dst string) {
+   if len(T.timings) < 1 {
+      log.Warn("destination: no timings available")
+      return
+   }
+
+   // first by
+   dst = T.timings[0].byHost
+   if dst == "" {
+      dst = T.timings[0].byIP
+   }
+   return
+}
+
+func (T Timing) timing() (delta int64) {
+   if len(T.timings) < 2 {
+      log.Warn("timing: only one timing available, returning 0")
+      return 0
+   }
+   // first time - last time
+   idx := len(T.timings) - 1
+   return T.timings[idx].time.Sub(*T.timings[0].time).Milliseconds()
+}
 
 func (T Timing) ToMetrics(entity *integration.Entity) {
 
@@ -44,7 +97,7 @@ func (T Timing) ToMetrics(entity *integration.Entity) {
          }
          delta = (e.time.UnixMilli() - T.timings[i-1].time.UnixMilli()) / 1000
       }
-      m, err := metric.NewGauge(*e.time, "SMTP", float64(delta))
+      m, err := metric.NewGauge(*e.time, "MTA", float64(delta))
       if err != nil {
          log.Error("NewGauge: %v", err)
          continue

@@ -144,3 +144,7 @@ func headersToArray(r io.Reader) (value []string) {
 func (a *Agent) Username() string {
    return a.UserName
 }
+
+func (a *Agent) AgentHost() string {
+   return a.SMTPHost
+}

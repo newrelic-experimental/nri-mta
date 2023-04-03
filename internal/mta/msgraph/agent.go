@@ -47,3 +47,7 @@ func (a *Agent) Receive(ctx context.Context, direction constants.Direction, id i
 func (a *Agent) Username() string {
    return a.UserName
 }
+
+func (a *Agent) AgentHost() string {
+   return "MSGraph"
+}

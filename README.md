@@ -7,7 +7,7 @@ mail server _unless_ SMTP and IMAP servers are *directly* addressable. It is a f
 We can provide the header values as Metrics (and perhaps some day as Events or Spans), however the analysis/visualization is strictly a back-end function. Without significant back-end work these measurements are only moderately useful.
 
 ## Installation
-Copy the appropriate [Release](releases/)executable to
+Copy the appropriate [Release](releases/) executable to
 - Linux `/var/db/newrelic-infra/custom-integrations/nri-mta`
 - Windows `C:\Program Files\New Relic\newrelic-infra\newrelic-integrations\nri-mta.exe`
 assuming a normal/standard Infrastructure installation.
@@ -58,8 +58,29 @@ Processors:
 Currently the only `Kind` available is `IMAP`, at some future point `MSGRAPH` ( [Microsoft's Graph API](https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0) ) may be supported.
 
 ## Outputs
+### Metrics
+Each `recieved:` line generates an `MTA` guage metric with these attributes:
+- "direction": SEND | RECEIVE
+- "messageId": A unique identifier for the transaction.
+- "receivedAt": timestamp
+- "receivedBy": Receiving host or ip address
+- "receivedFrom": Sending host or ip address
+- "sequenceId": sequence id for this header starting with 1 where 1 is the _last_ header received (ie latest)
 
-## Troubleshooting
+A complete message transit trace can be read by ordering a `messageId` by `sequenceId`
+
+There is no "overall" timing metric.
+
+### Events
+Each completed message transit generates a single `InfrastructureEvent` with a `category` of `MTA`. This event represents the total elapsed time (ms) for the message transit.
+
+Each event includes:
+- "destination": where the message was sent to
+- "direction": SEND | RECEIVE
+- "messageId": A unique identifier for the transaction.
+- "source": where the message originated
+- "transitTime": total elapsed time from source to destination (ms)
+
 
 ## Building
 `go build cmd/nri-mta/nri-mta.go`

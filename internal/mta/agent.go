@@ -16,6 +16,7 @@ type MTAgent interface {
    Send(ctx context.Context, direction constants.Direction, id int64, to string) (err error)
    Receive(ctx context.Context, direction constants.Direction, id int64) (headers []string, err error)
    Username() string
+   AgentHost() string
 }
 
 var constructors = make(map[constants.Kind]func() interface{}, 10)
