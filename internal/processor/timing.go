@@ -27,7 +27,36 @@ type timing struct {
    id       int
 }
 
+func (T Timing) ToTraces() {
+   if !arguments.Args.Traces {
+      return
+   }
+   // spans := make([]*Span, 0, len(T.timings))
+   parentId := ""
+   var duration time.Duration = 0
+
+   for i, t := range T.timings {
+      if i == 0 {
+         // No special case for the first index
+      } else {
+         duration = t.time.Sub(*T.timings[i].time)
+      }
+      id := T.id + ":" + strconv.Itoa(t.id)
+      name := t.byHost
+      if name == "" {
+         name = t.byIP
+      }
+      RecordSpan(id, T.id+string(T.direction), *t.time, duration, name, parentId)
+      // spans = append(spans, NewSpan(id, T.id, t.time.UnixMilli(), float64(duration), name, parentId))
+      parentId = id
+   }
+   SendSpans()
+}
+
 func (T Timing) ToEvent(entity *integration.Entity, src string, dst string) {
+   if !arguments.Args.Events {
+      return
+   }
    evt, err := event.New(time.Now(), "MTA response time", "MTA")
    if err != nil {
       log.Error(" error creating new Event: %v", err)
@@ -82,6 +111,9 @@ func (T Timing) timing() (delta int64) {
 }
 
 func (T Timing) ToMetrics(entity *integration.Entity) {
+   if !arguments.Args.Metrics {
+      return
+   }
 
    log.Debug("ToMetrics: T.timings: %+v", T.timings)
    for i, e := range T.timings {

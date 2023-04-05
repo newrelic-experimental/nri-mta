@@ -20,22 +20,21 @@ const (
 )
 
 var (
-   args               arguments.ArgumentList
    integrationVersion = "0.0.1"
    gitCommit          = ""
    buildDate          = ""
 )
 
 func Main() {
-   log.SetupLogging(args.Verbose)
+   log.SetupLogging(arguments.Args.Verbose)
    // Create Integration
-   i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
+   i, err := integration.New(integrationName, integrationVersion, integration.Args(&arguments.Args))
    exitOnErr(err, "integration.New")
 
    // e, err := i.NewEntity("", "", "")
    // exitOnErr(err)
 
-   if args.ShowVersion {
+   if arguments.Args.ShowVersion {
       fmt.Printf(
          "New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
          strings.Replace(integrationName, "com.newrelic.", "", 1),
@@ -47,10 +46,10 @@ func Main() {
       os.Exit(0)
    }
 
-   err = args.Validate()
-   exitOnErr(err, "args.Validate")
+   err = arguments.Args.Validate()
+   exitOnErr(err, "Args.Validate")
 
-   processors, err := processor.GetProcessors(args.TraceConfig)
+   processors, err := processor.GetProcessors(arguments.Args.TraceConfig)
    if err != nil {
       exitOnErr(err, "processor.GetProcessors")
    }
@@ -59,7 +58,7 @@ func Main() {
    }
 
    // FIXME tweak the timeout so we finish _before_ the process is killed
-   ctx, cancel := context.WithTimeout(context.Background(), time.Duration(args.Timeout)*time.Second)
+   ctx, cancel := context.WithTimeout(context.Background(), time.Duration(arguments.Args.Timeout)*time.Second)
    defer cancel()
 
    var wg sync.WaitGroup

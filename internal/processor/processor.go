@@ -38,6 +38,7 @@ func (p *Processor) Process(ctx context.Context, wg *sync.WaitGroup, entity *int
       }
       timing.ToMetrics(entity)
       timing.ToEvent(entity, p.MTA.MTAgent.AgentHost(), p.Client.MTAgent.AgentHost())
+      timing.ToTraces()
    }()
 
    // Ingress
@@ -51,6 +52,7 @@ func (p *Processor) Process(ctx context.Context, wg *sync.WaitGroup, entity *int
       }
       timing.ToMetrics(entity)
       timing.ToEvent(entity, p.Client.MTAgent.AgentHost(), p.MTA.MTAgent.AgentHost())
+      timing.ToTraces()
    }()
    log.Debug("p.Process: exit wg: %+v", wg)
    return

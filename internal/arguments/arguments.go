@@ -11,6 +11,8 @@ import (
    "time"
 )
 
+var Args ArgumentList
+
 type ArgumentList struct {
    sdkArgs.DefaultArgumentList
    Timeout               int    `default:"30" help:"The number of seconds to wait before a request times out."`
@@ -20,6 +22,8 @@ type ArgumentList struct {
    TLSInsecureSkipVerify bool   `default:"false" help:"Skip verification of the certificate sent by the host."`
    TraceConfig           string `default:"trace-config.yml" help:""`
    ReceivePatterns       string `default:"receive.patterns" help:""`
+   Traces                bool   `default:"false" help:"Publish Trace data (Spans)"`
+   NewRelicIngestKey     string `default:"" help:"New Relic Ingest Key"`
 }
 
 // Patterns all come from the config file

@@ -24,6 +24,8 @@ Additionally, these configuration settings are available under the `env` stanza 
 - `RECEIVE_PATTERNS`: a string containing the full path to the receive pattern file.
 - `TIMEOUT`: an integer denoting the number of seconds to wait before a send/receive request times out. (default 30)
 - `TRACE_CONFIG`:  a string containing the full path to the trace config file.
+- `TRACES`: boolean enabling Trace Span generation. (default false)
+- `NEW_RELIC_INGEST_KEY`: New Relic Ingest Key. Required if `TRACES` enabled.
 
 ### Receive pattern file
 The [regular expressions](https://github.com/google/re2/wiki/Syntax) in this file capture the header information that is used to generate Metrics. For [RFC 2821](https://www.rfc-editor.org/rfc/rfc2821#section-4.4) compliant MTAs the single enabled expression should be sufficient:
@@ -57,7 +59,7 @@ Currently the only `Kind` available is `IMAP`, at some future point `MSGRAPH` ( 
 
 ## Outputs
 ### Metrics
-Each `received:` line generates an `MTA` guage metric with these attributes:
+Each `received:` line generates a `MTA` guage metric with these attributes:
 - "direction": SEND | RECEIVE
 - "messageId": A unique identifier for the transaction.
 - "receivedAt": timestamp
@@ -70,7 +72,7 @@ A complete message transit trace can be read by ordering a `messageId` by `seque
 There is no "overall" timing metric.
 
 ### Events
-Each completed message transit generates a single `InfrastructureEvent` with a `category` of `MTA`. This event represents the total elapsed time (ms) for the message transit.
+Each completed message transit generates a single `InfrastructureEvent` with a `category` of `MTA`. This event represents the total elapsed time (ms) for the message transit from sender to receiver.
 
 Each event includes:
 - "destination": where the message was sent to
@@ -78,6 +80,9 @@ Each event includes:
 - "messageId": A unique identifier for the transaction.
 - "source": where the message originated
 - "transitTime": total elapsed time from source to destination (ms)
+
+### Traces
+Each `received:` line generates a Span with a `service.name` of `MTA` with a correct `parent.id` generating a complete Trace for the message's transit.
 
 
 ## Building

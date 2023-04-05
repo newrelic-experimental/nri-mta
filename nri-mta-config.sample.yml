@@ -1,6 +1,9 @@
 integrations:
   - name: nri-mta
     env:
+      METRICS: true # Override default false
+      EVENTS:  true # Override default false
+      TRACES:  true # Override default false
       # Avoid escape substitution by enclosing strings in SINGLE quotes
       # Full path to the receive pattern file
       RECEIVE_PATTERNS: ''
@@ -8,3 +11,5 @@ integrations:
       TIMEOUT: 30
       # Full path to the trace config file
       TRACE_CONFIG: ''
+      # Required if TRACES enabled
+      NEW_RELIC_INGEST_KEY: '<INGEST_KEY>'
